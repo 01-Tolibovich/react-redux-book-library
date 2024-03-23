@@ -1,29 +1,58 @@
 import { useSelector, useDispatch } from "react-redux";
-import { deleteBook } from "../../redux/books/actionCreators";
+import { deleteBook, toggleFavorite } from "../../redux/books/actionCreators";
+import { selectAuthorFilter, selectTitleFilter } from "../../redux/slices/filterSlice";
+
+import { BsBookmarkStar, BsBookmarkStarFill  } from "react-icons/bs"
 
 import "./styles.css";
 
 const BookList = () => {
   const books = useSelector(state => state.books)
+  const filterByTitile = useSelector(selectTitleFilter)
+  const filterByAuthor = useSelector(selectAuthorFilter)
   const dispatch = useDispatch();
 
   const deleteHandle = (id) => {
     dispatch(deleteBook(id));
   };
 
+  const toggleFavoriteHandle = (id) => {
+    dispatch(toggleFavorite(id))
+  }
+
+  const filteredBooks = books.filter((book) => {
+    const matchesTitle = book.title
+      .toLowerCase()
+      .includes(filterByTitile.toLowerCase());
+    const matchesAuthor = book.author
+      .toLowerCase()
+      .includes(filterByAuthor.toLowerCase())
+
+    return matchesTitle && matchesAuthor
+  })
+
   return (
     <div className="app-block book-list">
       <h2>Book list</h2>
-      {books.length === 0 ? (
+      {filteredBooks.length === 0 ? (
         <p>No books available</p>
       ) : (
         <ul>
-          {books.map((book, i) => (
+          {filteredBooks.map((book, i) => (
             <li key={book.id}>
               <div className="book-info">
                 {++i}) {book.title} by <strong>{book.author}</strong>
               </div>
-              <button onClick={() => deleteHandle(book.id)} className="book-actions">Delete</button>
+              <div className="book-actions">
+                <span role="button" onClick={() => toggleFavoriteHandle(book.id)}>
+                {book.isFavorite ? (
+                  <BsBookmarkStarFill className="star-icon" />
+                ) : (
+                  <BsBookmarkStar className="star-icon" />
+                )}
+                </span>
+                <button onClick={() => deleteHandle(book.id)} className="book-actions">Delete</button>
+              </div>
             </li>
           ))}
         </ul>

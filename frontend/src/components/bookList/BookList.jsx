@@ -69,7 +69,8 @@ const BookList = () => {
             <li key={book.id}>
               <div className="book-info">
                 {++i}) {highlightMatch(book.title, filterByTitile)} by{" "}
-                <strong>{highlightMatch(book.author, filterByAuthor)}</strong>
+                <strong> {highlightMatch(book.author, filterByAuthor)} </strong>
+                ({ book.source })
               </div>
               <div className="book-actions">
                 <span

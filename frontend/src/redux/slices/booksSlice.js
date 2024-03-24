@@ -24,6 +24,4 @@ const booksSlice = createSlice({
 
 export const { addBook, deleteBook, toggleFavorite } = booksSlice.actions;
 
-console.log(booksSlice.actions);
-
 export default booksSlice.reducer;

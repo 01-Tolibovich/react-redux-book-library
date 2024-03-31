@@ -1,10 +1,7 @@
 import { useState } from "react";
 
 import { useDispatch } from "react-redux";
-import { addBook } from "../../redux/slices/booksSlice";
-
-import axios from "axios";
-
+import { addBook, funcFunction   } from "../../redux/slices/booksSlice";
 import booksData from "../../data/books.json";
 
 import createBookWithID from "../../utils/createBookWithID";
@@ -25,26 +22,18 @@ const BookForm = () => {
       setTitle("");
       setAuthor("");
     }
-  }
+  };
 
   const handleAddRandomBook = () => {
     const randomIndex = Math.floor(Math.random() * booksData.length);
     const randomBook = booksData[randomIndex];
 
-    dispatch(addBook(createBookWithID(randomBook, "Random")))
+    dispatch(addBook(createBookWithID(randomBook, "Random")));
+  };
 
-  }
-
-  const handleAddRandomBookViaAPI = async () => {
-    try {
-      const res = await axios.get("http://localhost:4000/random-book");
-      if (res?.data?.title && res?.data?.author) {
-        dispatch(addBook(createBookWithID(res.data, "API")));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const handleAddRandomBookViaAPI = () => {
+    dispatch(funcFunction);
+  };
 
   return (
     <div className="app-block book-form">
@@ -52,15 +41,29 @@ const BookForm = () => {
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="title">Title: </label>
-          <input type="text" id="title" value={title} onChange={e => setTitle(e.target.value)} />
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
         </div>
         <div>
           <label htmlFor="author">Author: </label>
-          <input type="text" id="author" value={author} onChange={e => setAuthor(e.target.value)} />
+          <input
+            type="text"
+            id="author"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+          />
         </div>
         <button type="submit">Add book</button>
-        <button type="button" onClick={handleAddRandomBook}>Abb random</button>
-        <button type="button" onClick={handleAddRandomBookViaAPI}>Add random via API</button>
+        <button type="button" onClick={handleAddRandomBook}>
+          Abb random
+        </button>
+        <button type="button" onClick={handleAddRandomBookViaAPI}>
+          Add random via API
+        </button>
       </form>
     </div>
   );
